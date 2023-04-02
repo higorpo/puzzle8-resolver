@@ -13,6 +13,8 @@ List<dynamic> readProgramParameters(List<String> arguments) {
 }
 
 void main(List<String> arguments) {
+  Stopwatch stopwatch = Stopwatch()..start();
+
   final initialState = readProgramParameters(arguments);
   final node = Node.fromParameters(initialState);
 
@@ -57,4 +59,6 @@ void main(List<String> arguments) {
     // Pega o primeiro nodo da lista de nodos abertos
     currentNode = openedNodes.first;
   }
+
+  print('Tempo de execução: ${stopwatch.elapsed}');
 }
