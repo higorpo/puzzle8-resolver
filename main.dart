@@ -23,7 +23,6 @@ void main(List<String> arguments) {
   var visitedNodes = [];
   final openedNodes = SortedList<Node>((a, b) => a.cost.compareTo(b.cost));
 
-  var interations = 0;
   while (true) {
     // É nodo objetivo?
     if (currentNode.isGoal()) {
@@ -31,13 +30,6 @@ void main(List<String> arguments) {
 
       currentNode.printTree();
 
-      break;
-    }
-
-    interations++;
-
-    if (interations > 10) {
-      print("Limite de iterações atingido!");
       break;
     }
 
