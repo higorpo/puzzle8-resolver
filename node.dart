@@ -1,12 +1,18 @@
+import 'package:equatable/equatable.dart';
+
 import 'heuristics.dart';
+import 'package:collection/collection.dart';
 
-class Node {
-  Node? parent;
-  List<List<int>> state;
-  List<Node> children = [];
-  int depth;
+import 'utils.dart';
 
-  late bool isRoot;
+class Node extends Equatable {
+  final Node? parent;
+  final List<List<int>> state;
+  final List<Node> children = [];
+  final int depth;
+
+  late final int cost;
+  late final bool isRoot;
 
   Node({
     required this.state,
@@ -14,6 +20,12 @@ class Node {
     this.depth = 0,
   }) {
     isRoot = parent == null;
+    cost = calculateDistanceToSucess(this);
+  }
+
+  @override
+  List<Object> get props {
+    return [state];
   }
 
   factory Node.fromParameters(List<dynamic> value) {
@@ -28,22 +40,28 @@ class Node {
   }
 
   bool isGoal() {
-    return state ==
-        [
-          [1, 2, 3],
-          [4, 5, 6],
-          [7, 8, 0],
-        ];
+    return deepListEquals(state, [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 0],
+    ]);
   }
 
   printTree() {
-    print("| ${_getNumber(0, 0)} | ${_getNumber(0, 1)} | ${_getNumber(0, 2)} |");
-    print("| ${_getNumber(1, 0)} | ${_getNumber(1, 1)} | ${_getNumber(1, 2)} |");
-    print("| ${_getNumber(2, 0)} | ${_getNumber(2, 1)} | ${_getNumber(2, 2)} |");
-    print("Distância: ${calculateDistanceToSucess(this)}");
+    final indent = "\t" * depth;
+
+    if (isRoot) {
+      print("$indent Root:");
+    }
+
+    print("$indent | ${_getNumber(0, 0)} | ${_getNumber(0, 1)} | ${_getNumber(0, 2)} |");
+    print("$indent | ${_getNumber(1, 0)} | ${_getNumber(1, 1)} | ${_getNumber(1, 2)} |");
+    print("$indent | ${_getNumber(2, 0)} | ${_getNumber(2, 1)} | ${_getNumber(2, 2)} |");
+    print("$indent Distância: ${calculateDistanceToSucess(this)}");
+    print("$indent Custo: $cost\n\n");
   }
 
-  void generateChildren() {
+  List<Node> generateChildren() {
     final emptyPosition = _getEmptyPosition();
 
     // Check if can move empty space to left
@@ -97,6 +115,8 @@ class Node {
         depth: depth + 1,
       ));
     }
+
+    return children;
   }
 
   String _getNumber(int row, int column) {
