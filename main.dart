@@ -28,7 +28,7 @@ void main(List<String> arguments) {
     if (currentNode.isGoal()) {
       print("Nodo objetivo encontrado!");
 
-      currentNode.printTree();
+      currentNode.printTree(withIndent: false);
 
       break;
     }

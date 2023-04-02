@@ -20,7 +20,11 @@ class Node extends Equatable {
     this.depth = 0,
   }) {
     isRoot = parent == null;
-    cost = calculateDistanceToSucess(this);
+    if (parent != null) {
+      cost = calculateDistanceToSucess(this) + 1;
+    } else {
+      cost = calculateDistanceToSucess(this);
+    }
   }
 
   @override
@@ -47,8 +51,8 @@ class Node extends Equatable {
     ]);
   }
 
-  printTree() {
-    final indent = "\t" * depth;
+  printTree({bool withIndent = true}) {
+    final indent = withIndent ? "\t" * depth : "";
 
     if (isRoot) {
       print("$indent Root:");
@@ -58,7 +62,8 @@ class Node extends Equatable {
     print("$indent | ${_getNumber(1, 0)} | ${_getNumber(1, 1)} | ${_getNumber(1, 2)} |");
     print("$indent | ${_getNumber(2, 0)} | ${_getNumber(2, 1)} | ${_getNumber(2, 2)} |");
     print("$indent Distância: ${calculateDistanceToSucess(this)}");
-    print("$indent Custo: $cost\n\n");
+    print("$indent Custo: $cost");
+    print("$indent Profundidade: $depth\n\n");
   }
 
   List<Node> generateChildren() {
