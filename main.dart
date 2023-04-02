@@ -39,8 +39,12 @@ void main(List<String> arguments) {
     // Não é nodo objetivo, então gera os filhos
     final children = currentNode.generateChildren();
 
-    // Adiciona os filhos a lista de nodos abertos
-    openedNodes.addAll(children);
+    // Adiciona os filhos a lista de nodos abertos apenas se eles já não foram visitados
+    children.forEach((child) {
+      if (!visitedNodes.contains(child)) {
+        openedNodes.add(child);
+      }
+    });
 
     // Adiciona o nodo atual a lista de nodos visitados
     visitedNodes.add(currentNode);
