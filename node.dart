@@ -21,9 +21,25 @@ class Node extends Equatable {
   }) {
     isRoot = parent == null;
     if (parent != null) {
-      cost = calculateDistanceToSucess(this) + 1;
+      cost = (calculateDistanceToSucess(this) +
+              calculateNumOfMisplacedParts(this) +
+              calculateLinearConflict(this) +
+              calculatePositionOfEmptySpace(this) +
+              calculateOrderedMatch(this)) +
+          depth +
+          10;
+      // cost = calculateDistanceToSucess(this) +
+      //     calculateNumOfMisplacedParts(this) * 3 +
+      //     calculateLinearConflict(this) +
+      //     calculatePositionOfEmptySpace(this) +
+      //     10;
     } else {
-      cost = calculateDistanceToSucess(this);
+      cost = 0;
+
+      // cost = calculateDistanceToSucess(this) +
+      //     calculateNumOfMisplacedParts(this) * 3 +
+      //     calculateLinearConflict(this) +
+      //     calculatePositionOfEmptySpace(this);
     }
   }
 

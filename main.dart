@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:sorted_list/sorted_list.dart';
 
+import 'heuristics.dart';
 import 'node.dart';
 
 List<dynamic> readProgramParameters(List<String> arguments) {
@@ -23,7 +24,11 @@ void main(List<String> arguments) {
   var visitedNodes = [];
   final openedNodes = SortedList<Node>((a, b) => a.cost.compareTo(b.cost));
 
+  var iterations = 0;
+
   while (true) {
+    iterations++;
+
     // É nodo objetivo?
     if (currentNode.isGoal()) {
       print("Nodo objetivo encontrado!");
@@ -36,6 +41,12 @@ void main(List<String> arguments) {
     // Imprime o nodo atual
     currentNode.printTree();
 
+    // Remove o nodo atual da lista de nodos abertos
+    openedNodes.remove(currentNode);
+
+    // Adiciona o nodo atual a lista de nodos visitados
+    visitedNodes.add(currentNode);
+
     // Não é nodo objetivo, então gera os filhos
     final children = currentNode.generateChildren();
 
@@ -46,14 +57,10 @@ void main(List<String> arguments) {
       }
     });
 
-    // Adiciona o nodo atual a lista de nodos visitados
-    visitedNodes.add(currentNode);
-
-    // Remove o nodo atual da lista de nodos abertos
-    openedNodes.remove(currentNode);
-
     // Pega o primeiro nodo da lista de nodos abertos
     currentNode = openedNodes.first;
+
+    print('Iterações: $iterations');
   }
 
   print('Tempo de execução: ${stopwatch.elapsed}');
