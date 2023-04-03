@@ -95,7 +95,7 @@ class Node extends Equatable {
       ));
     }
 
-    // // Check if can move empty space to up
+    // Check if can move empty space to up
     if (_canMoveEmptySpaceToUp(emptyPosition)) {
       final newState = _deepCloneState();
       newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first - 1][emptyPosition.values.first];
@@ -108,7 +108,7 @@ class Node extends Equatable {
       ));
     }
 
-    // // Check if can move empty space to down
+    // Check if can move empty space to down
     if (_canMoveEmptySpaceToDown(emptyPosition)) {
       final newState = _deepCloneState();
       newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first + 1][emptyPosition.values.first];
