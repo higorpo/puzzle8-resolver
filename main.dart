@@ -32,15 +32,8 @@ void main(List<String> arguments) {
 
     // É nodo objetivo?
     if (currentNode.isGoal()) {
-      print("Nodo objetivo encontrado!");
-
-      currentNode.printTree(withIndent: false);
-
       break;
     }
-
-    // Imprime o nodo atual
-    // currentNode.printTree();
 
     // Adiciona o nodo atual a lista de nodos visitados
     visitedNodes.add(currentNode);
@@ -64,6 +57,22 @@ void main(List<String> arguments) {
     openedNodes.remove(currentNode);
   }
 
+  print('Resultado encontrado!');
+
+  // Go back from leaf to root
+  var path = [];
+  while (currentNode.parent != null) {
+    path.add(currentNode.getDescriptionOfThePerformedStep());
+    currentNode = currentNode.parent!;
+  }
+
   print('Iterações: $iterations');
   print('Tempo de execução: ${stopwatch.elapsed}');
+
+  print('\nLista de passos para resolver o problema:');
+  int index = 1;
+  path.reversed.forEach((step) {
+    print('$index. $step');
+    index++;
+  });
 }

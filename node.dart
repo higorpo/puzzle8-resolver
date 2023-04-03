@@ -66,6 +66,35 @@ class Node extends Equatable {
     print("$indent Profundidade: $depth\n\n");
   }
 
+  printTreeText() {
+    String text = "";
+
+    text += "| ${_getNumber(0, 0)} | ${_getNumber(0, 1)} | ${_getNumber(0, 2)} |\n";
+    text += "| ${_getNumber(1, 0)} | ${_getNumber(1, 1)} | ${_getNumber(1, 2)} |\n";
+    text += "| ${_getNumber(2, 0)} | ${_getNumber(2, 1)} | ${_getNumber(2, 2)} |\n";
+
+    return text;
+  }
+
+  String getDescriptionOfThePerformedStep() {
+    if (isRoot) return "";
+
+    final emptyPosition = _getEmptyPosition();
+    final parentEmptyPosition = parent!._getEmptyPosition();
+
+    if (emptyPosition.values.first > parentEmptyPosition.values.first) {
+      return "Mova o número ${_getValueLeftFromEmptySpace(emptyPosition)}";
+    } else if (emptyPosition.values.first < parentEmptyPosition.values.first) {
+      return "Mova o número ${_getValueRightFromEmptySpace(emptyPosition)}";
+    } else if (emptyPosition.keys.first > parentEmptyPosition.keys.first) {
+      return "Mova o número ${_getValueUpFromEmptySpace(emptyPosition)}";
+    } else if (emptyPosition.keys.first < parentEmptyPosition.keys.first) {
+      return "Mova o número ${_getValueDownFromEmptySpace(emptyPosition)}";
+    }
+
+    return "";
+  }
+
   List<Node> generateChildren() {
     final emptyPosition = _getEmptyPosition();
 
@@ -163,5 +192,21 @@ class Node extends Equatable {
     }
 
     throw Exception("Empty space not found");
+  }
+
+  int _getValueLeftFromEmptySpace(Map<int, int> emptyPosition) {
+    return state[emptyPosition.keys.first][emptyPosition.values.first - 1];
+  }
+
+  int _getValueRightFromEmptySpace(Map<int, int> emptyPosition) {
+    return state[emptyPosition.keys.first][emptyPosition.values.first + 1];
+  }
+
+  int _getValueUpFromEmptySpace(Map<int, int> emptyPosition) {
+    return state[emptyPosition.keys.first - 1][emptyPosition.values.first];
+  }
+
+  int _getValueDownFromEmptySpace(Map<int, int> emptyPosition) {
+    return state[emptyPosition.keys.first + 1][emptyPosition.values.first];
   }
 }
