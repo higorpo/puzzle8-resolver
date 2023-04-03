@@ -4,6 +4,7 @@ import 'package:sorted_list/sorted_list.dart';
 
 import 'heuristics.dart';
 import 'node.dart';
+import 'utils.dart';
 
 List<dynamic> readProgramParameters(List<String> arguments) {
   if (arguments.isNotEmpty) {
@@ -39,10 +40,7 @@ void main(List<String> arguments) {
     }
 
     // Imprime o nodo atual
-    currentNode.printTree();
-
-    // Remove o nodo atual da lista de nodos abertos
-    openedNodes.remove(currentNode);
+    // currentNode.printTree();
 
     // Adiciona o nodo atual a lista de nodos visitados
     visitedNodes.add(currentNode);
@@ -50,9 +48,11 @@ void main(List<String> arguments) {
     // Não é nodo objetivo, então gera os filhos
     final children = currentNode.generateChildren();
 
-    // Adiciona os filhos a lista de nodos abertos apenas se eles já não foram visitados
+    // Adiciona os filhos a lista de nodos abertos apenas se eles já não foram visitados e se não houver um estado com uma melhor solução
     children.forEach((child) {
-      if (!visitedNodes.contains(child)) {
+      final hasBetterNode = visitedNodes.any((node) => deepListEquals(node.state, child.state) && node.cost < child.cost);
+
+      if (!hasBetterNode) {
         openedNodes.add(child);
       }
     });
@@ -60,8 +60,10 @@ void main(List<String> arguments) {
     // Pega o primeiro nodo da lista de nodos abertos
     currentNode = openedNodes.first;
 
-    print('Iterações: $iterations');
+    // Remove o nodo atual da lista de nodos abertos
+    openedNodes.remove(currentNode);
   }
 
+  print('Iterações: $iterations');
   print('Tempo de execução: ${stopwatch.elapsed}');
 }

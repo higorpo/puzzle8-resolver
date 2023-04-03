@@ -17,35 +17,19 @@ class Node extends Equatable {
   Node({
     required this.state,
     this.parent = null,
-    this.depth = 0,
+    this.depth = 1,
   }) {
     isRoot = parent == null;
     if (parent != null) {
-      cost = (calculateDistanceToSucess(this) +
-              calculateNumOfMisplacedParts(this) +
-              calculateLinearConflict(this) +
-              calculatePositionOfEmptySpace(this) +
-              calculateOrderedMatch(this)) +
-          depth +
-          10;
-      // cost = calculateDistanceToSucess(this) +
-      //     calculateNumOfMisplacedParts(this) * 3 +
-      //     calculateLinearConflict(this) +
-      //     calculatePositionOfEmptySpace(this) +
-      //     10;
+      cost = calculateDistanceToSucess(this) + calculateNumOfMisplacedParts(this) + calculateLinearConflict(this) + parent!.cost + 1;
     } else {
-      cost = 0;
-
-      // cost = calculateDistanceToSucess(this) +
-      //     calculateNumOfMisplacedParts(this) * 3 +
-      //     calculateLinearConflict(this) +
-      //     calculatePositionOfEmptySpace(this);
+      cost = 1;
     }
   }
 
   @override
   List<Object> get props {
-    return [state];
+    return [state, depth, cost];
   }
 
   factory Node.fromParameters(List<dynamic> value) {
