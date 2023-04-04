@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:sorted_list/sorted_list.dart';
 import 'package:collection/collection.dart';
 
 import 'node.dart';
+import 'utils.dart';
 
 List<dynamic> readProgramParameters(List<String> arguments) {
   if (arguments.isNotEmpty) {
@@ -47,11 +47,12 @@ void main(List<String> arguments) {
 
     currentNode = openedNodes.first;
 
-    openedNodes.remove(currentNode);
+    openedNodes.removeAt(0);
   }
 
   print('Tempo de execução: ${stopwatch.elapsed}');
   print('Quantidade de nodos visitados: ${visitedNodes.length}');
+  print('Quantidade de nodos abertos: ${openedNodes.length}');
   print('Quantidade de passos para resolver o problema: ${currentNode.goalPath.length}');
 
   print('\nLista de passos para resolver o problema:');

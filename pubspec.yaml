@@ -3,4 +3,4 @@ name: puzzleresolver
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
-dependencies: { collection: ^1.17.0, equatable: ^2.0.5, sorted_list: ^1.0.0 }
+dependencies: { collection: ^1.17.0, equatable: ^2.0.5 }

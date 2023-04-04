@@ -20,19 +20,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "sorted_list",
-      "rootUri": "file:///home/bridge/.pub-cache/hosted/pub.dartlang.org/sorted_list-1.0.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "puzzleresolver",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2023-04-02T17:15:31.227344Z",
+  "generated": "2023-04-04T17:51:56.882284Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }
