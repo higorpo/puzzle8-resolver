@@ -22,7 +22,7 @@ void main(List<String> arguments) {
 
   var currentNode = node;
 
-  var visitedNodes = [];
+  Map<String, List<Node>> visitedNodes = {};
   final openedNodes = SortedList<Node>((a, b) => a.cost.compareTo(b.cost));
 
   while (true) {
@@ -30,12 +30,16 @@ void main(List<String> arguments) {
       break;
     }
 
-    visitedNodes.add(currentNode);
+    if (visitedNodes[currentNode.stateToString()] == null) {
+      visitedNodes[currentNode.stateToString()] = [];
+    }
+
+    visitedNodes[currentNode.stateToString()]!.add(currentNode);
 
     final children = currentNode.generateChildren();
 
     children.forEach((child) {
-      final hasBetterNode = visitedNodes.any((node) => deepListEquals(node.state, child.state) && node.cost < child.cost);
+      final hasBetterNode = visitedNodes[child.stateToString()]?.any((element) => element.cost < child.cost) ?? false;
 
       if (!hasBetterNode) {
         openedNodes.add(child);

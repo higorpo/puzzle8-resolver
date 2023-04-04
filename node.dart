@@ -80,6 +80,10 @@ class Node extends Equatable {
     return "";
   }
 
+  String stateToString() {
+    return state.map((row) => row.join('')).join('');
+  }
+
   List<Node> generateChildren() {
     final emptyPosition = _getEmptyPosition();
 
