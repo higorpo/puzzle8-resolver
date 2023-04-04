@@ -4,7 +4,6 @@ import 'package:sorted_list/sorted_list.dart';
 import 'package:collection/collection.dart';
 
 import 'node.dart';
-import 'utils.dart';
 
 List<dynamic> readProgramParameters(List<String> arguments) {
   if (arguments.isNotEmpty) {
