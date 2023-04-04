@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:sorted_list/sorted_list.dart';
 
-import 'heuristics.dart';
 import 'node.dart';
 import 'utils.dart';
 
