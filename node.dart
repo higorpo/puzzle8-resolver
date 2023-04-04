@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 import 'heuristics.dart';
-import 'package:collection/collection.dart';
-
 import 'utils.dart';
 
 class Node extends Equatable {
@@ -51,31 +49,6 @@ class Node extends Equatable {
     ]);
   }
 
-  printTree({bool withIndent = true}) {
-    final indent = withIndent ? "\t" * depth : "";
-
-    if (isRoot) {
-      print("$indent Root:");
-    }
-
-    print("$indent | ${_getNumber(0, 0)} | ${_getNumber(0, 1)} | ${_getNumber(0, 2)} |");
-    print("$indent | ${_getNumber(1, 0)} | ${_getNumber(1, 1)} | ${_getNumber(1, 2)} |");
-    print("$indent | ${_getNumber(2, 0)} | ${_getNumber(2, 1)} | ${_getNumber(2, 2)} |");
-    print("$indent Distância: ${calculateDistanceToSucess(this)}");
-    print("$indent Custo: $cost");
-    print("$indent Profundidade: $depth\n\n");
-  }
-
-  printTreeText() {
-    String text = "";
-
-    text += "| ${_getNumber(0, 0)} | ${_getNumber(0, 1)} | ${_getNumber(0, 2)} |\n";
-    text += "| ${_getNumber(1, 0)} | ${_getNumber(1, 1)} | ${_getNumber(1, 2)} |\n";
-    text += "| ${_getNumber(2, 0)} | ${_getNumber(2, 1)} | ${_getNumber(2, 2)} |\n";
-
-    return text;
-  }
-
   String getDescriptionOfThePerformedStep() {
     if (isRoot) return "";
 
@@ -98,63 +71,23 @@ class Node extends Equatable {
   List<Node> generateChildren() {
     final emptyPosition = _getEmptyPosition();
 
-    // Check if can move empty space to left
     if (_canMoveEmptySpaceToLeft(emptyPosition)) {
-      final newState = _deepCloneState();
-      newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first][emptyPosition.values.first - 1];
-      newState[emptyPosition.keys.first][emptyPosition.values.first - 1] = 0;
-
-      children.add(Node(
-        state: newState,
-        parent: this,
-        depth: depth + 1,
-      ));
+      _moveEmptySpaceToLeft(emptyPosition);
     }
 
-    // Check if can move empty space to right
     if (_canMoveEmptySpaceToRight(emptyPosition)) {
-      final newState = _deepCloneState();
-      newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first][emptyPosition.values.first + 1];
-      newState[emptyPosition.keys.first][emptyPosition.values.first + 1] = 0;
-
-      children.add(Node(
-        state: newState,
-        parent: this,
-        depth: depth + 1,
-      ));
+      _moveEmptySpaceToRight(emptyPosition);
     }
 
-    // Check if can move empty space to up
     if (_canMoveEmptySpaceToUp(emptyPosition)) {
-      final newState = _deepCloneState();
-      newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first - 1][emptyPosition.values.first];
-      newState[emptyPosition.keys.first - 1][emptyPosition.values.first] = 0;
-
-      children.add(Node(
-        state: newState,
-        parent: this,
-        depth: depth + 1,
-      ));
+      _moveEmptySpaceToUp(emptyPosition);
     }
 
-    // Check if can move empty space to down
     if (_canMoveEmptySpaceToDown(emptyPosition)) {
-      final newState = _deepCloneState();
-      newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first + 1][emptyPosition.values.first];
-      newState[emptyPosition.keys.first + 1][emptyPosition.values.first] = 0;
-
-      children.add(Node(
-        state: newState,
-        parent: this,
-        depth: depth + 1,
-      ));
+      _moveEmptySpaceToDown(emptyPosition);
     }
 
     return children;
-  }
-
-  String _getNumber(int row, int column) {
-    return state[row][column] == 0 ? " " : state[row][column].toString();
   }
 
   List<List<int>> _deepCloneState() {
@@ -180,6 +113,54 @@ class Node extends Equatable {
 
   bool _canMoveEmptySpaceToDown(Map<int, int> emptyPosition) {
     return emptyPosition.keys.first < state.length - 1;
+  }
+
+  void _moveEmptySpaceToDown(Map<int, int> emptyPosition) {
+    final newState = _deepCloneState();
+    newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first + 1][emptyPosition.values.first];
+    newState[emptyPosition.keys.first + 1][emptyPosition.values.first] = 0;
+
+    children.add(Node(
+      state: newState,
+      parent: this,
+      depth: depth + 1,
+    ));
+  }
+
+  void _moveEmptySpaceToUp(Map<int, int> emptyPosition) {
+    final newState = _deepCloneState();
+    newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first - 1][emptyPosition.values.first];
+    newState[emptyPosition.keys.first - 1][emptyPosition.values.first] = 0;
+
+    children.add(Node(
+      state: newState,
+      parent: this,
+      depth: depth + 1,
+    ));
+  }
+
+  void _moveEmptySpaceToRight(Map<int, int> emptyPosition) {
+    final newState = _deepCloneState();
+    newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first][emptyPosition.values.first + 1];
+    newState[emptyPosition.keys.first][emptyPosition.values.first + 1] = 0;
+
+    children.add(Node(
+      state: newState,
+      parent: this,
+      depth: depth + 1,
+    ));
+  }
+
+  void _moveEmptySpaceToLeft(Map<int, int> emptyPosition) {
+    final newState = _deepCloneState();
+    newState[emptyPosition.keys.first][emptyPosition.values.first] = newState[emptyPosition.keys.first][emptyPosition.values.first - 1];
+    newState[emptyPosition.keys.first][emptyPosition.values.first - 1] = 0;
+
+    children.add(Node(
+      state: newState,
+      parent: this,
+      depth: depth + 1,
+    ));
   }
 
   Map<int, int> _getEmptyPosition() {
