@@ -32,10 +32,16 @@ class Node extends Equatable {
   }) {
     isRoot = parent == null;
     if (parent != null) {
-      if (PROGRAM_ALGORITHM == Algorithm.AStar) {
-        cost = calculateDistanceToSucess(this) + calculateNumOfMisplacedParts(this) + calculateLinearConflict(this) + parent!.cost + 1;
-      } else {
-        cost = parent!.depth + depth;
+      switch (PROGRAM_ALGORITHM) {
+        case Algorithm.AStar:
+          cost = calculateDistanceToSucess(this) + calculateNumOfMisplacedParts(this) + calculateLinearConflict(this) + parent!.cost + 1;
+          break;
+        case Algorithm.SimpleAStar:
+          cost = calculateNumOfMisplacedParts(this) + parent!.cost + 1;
+          break;
+        case Algorithm.UniformCost:
+          cost = parent!.depth + depth;
+          break;
       }
     } else {
       cost = 1;

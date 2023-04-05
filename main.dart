@@ -5,7 +5,7 @@ import 'package:collection/collection.dart';
 import 'node.dart';
 import 'utils.dart';
 
-enum Algorithm { AStar, UniformCost }
+enum Algorithm { AStar, SimpleAStar, UniformCost }
 
 List<dynamic> readStateFromProgramParameters(List<String> arguments) {
   if (arguments.isNotEmpty) {
@@ -17,12 +17,15 @@ List<dynamic> readStateFromProgramParameters(List<String> arguments) {
 
 Algorithm readAlgorithmFromProgramParameters(List<String> arguments) {
   if (arguments.length > 1) {
-    if (arguments[1] == 'AStar') {
-      return Algorithm.AStar;
-    } else if (arguments[1] == 'UniformCost') {
-      return Algorithm.UniformCost;
-    } else {
-      throw Exception("Invalid algorithm passed");
+    switch (arguments[1]) {
+      case 'AStar':
+        return Algorithm.AStar;
+      case 'SimpleAStar':
+        return Algorithm.SimpleAStar;
+      case 'UniformCost':
+        return Algorithm.UniformCost;
+      default:
+        throw Exception("Invalid algorithm passed");
     }
   }
 
@@ -48,8 +51,6 @@ void main(List<String> arguments) {
     if (currentNode.isGoal()) {
       break;
     }
-
-    print('${currentNode.state} - ${currentNode.cost}');
 
     if (visitedNodes[currentNode.stateToString()] == null) {
       visitedNodes[currentNode.stateToString()] = [];
