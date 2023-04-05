@@ -5,7 +5,9 @@ import 'package:collection/collection.dart';
 import 'node.dart';
 import 'utils.dart';
 
-List<dynamic> readProgramParameters(List<String> arguments) {
+enum Algorithm { AStar, UniformCost }
+
+List<dynamic> readStateFromProgramParameters(List<String> arguments) {
   if (arguments.isNotEmpty) {
     return jsonDecode(arguments[0]);
   }
@@ -13,10 +15,28 @@ List<dynamic> readProgramParameters(List<String> arguments) {
   throw Exception("No arguments passed");
 }
 
+Algorithm readAlgorithmFromProgramParameters(List<String> arguments) {
+  if (arguments.length > 1) {
+    if (arguments[1] == 'AStar') {
+      return Algorithm.AStar;
+    } else if (arguments[1] == 'UniformCost') {
+      return Algorithm.UniformCost;
+    } else {
+      throw Exception("Invalid algorithm passed");
+    }
+  }
+
+  return Algorithm.AStar;
+}
+
+var PROGRAM_ALGORITHM = Algorithm.AStar;
+
 void main(List<String> arguments) {
   Stopwatch stopwatch = Stopwatch()..start();
 
-  final initialState = readProgramParameters(arguments);
+  PROGRAM_ALGORITHM = readAlgorithmFromProgramParameters(arguments);
+
+  final initialState = readStateFromProgramParameters(arguments);
   final node = Node.fromParameters(initialState);
 
   var currentNode = node;
@@ -28,6 +48,8 @@ void main(List<String> arguments) {
     if (currentNode.isGoal()) {
       break;
     }
+
+    print('${currentNode.state} - ${currentNode.cost}');
 
     if (visitedNodes[currentNode.stateToString()] == null) {
       visitedNodes[currentNode.stateToString()] = [];

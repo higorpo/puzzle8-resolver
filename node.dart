@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'heuristics.dart';
+import 'main.dart';
 import 'utils.dart';
 
 class Node extends Equatable {
@@ -31,7 +32,11 @@ class Node extends Equatable {
   }) {
     isRoot = parent == null;
     if (parent != null) {
-      cost = calculateDistanceToSucess(this) + calculateNumOfMisplacedParts(this) + calculateLinearConflict(this) + parent!.cost + 1;
+      if (PROGRAM_ALGORITHM == Algorithm.AStar) {
+        cost = calculateDistanceToSucess(this) + calculateNumOfMisplacedParts(this) + calculateLinearConflict(this) + parent!.cost + 1;
+      } else {
+        cost = parent!.depth + depth;
+      }
     } else {
       cost = 1;
     }
